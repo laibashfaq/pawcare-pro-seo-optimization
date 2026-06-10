@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Symptom Checker & AI Health Diagnosis | PawCare Pro</title>
+    <meta name="description" content="Select your cat's symptoms to analyze potential health risks like CKD, diabetes, or respiratory issues. Get instant pet care guidelines.">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <!-- Logo Image Added Here -->
+            <img src="logo.png" alt="PawCare Pro - Smart Cat AI Health Assistant Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+            PawCare Pro
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="diagnosis.html" class="active">🐱 Diagnosis</a>
+            <a href="vets.html">🏥 Vet Finder</a>
+            <a href="reviews.html">✨ Reviews</a>
+            <a href="contact.html">📞 Contact</a>
+        </div>
+    </nav>
+
+    <section class="content-section">
+        <div id="step1" class="form-box">
+            <h2>🐾 Step 1: Basic Info</h2>
+            <p>Tell us a bit about your cat first.</p>
+            <input type="number" id="petAge" placeholder="Cat's Age (Years)">
+            <input type="number" id="petWeight" placeholder="Weight (kg)">
+            <select id="petLifestyle">
+                <option value="">Select Lifestyle</option>
+                <option value="indoor">Indoor 😴</option>
+                <option value="outdoor">Outdoor 🏃‍♂️</option>
+            </select>
+            <button class="btn blue" onclick="goToSymptoms()" style="margin-top: 20px;">Next: Symptoms ➡️</button>
+        </div>
+
+        <div id="step2" class="form-box" style="display: none; max-width: 800px;">
+            <h2>🔍 Step 2: Select Symptoms</h2>
+            <p>Pick at least 3 symptoms for an accurate check.</p>
+            <div class="scroll"
+                style="max-height: 300px; overflow-y: auto; margin: 20px 0; padding: 15px; background: #f8fafc; border-radius: 15px;">
+                <div id="symptomsContainer" class="symptom-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;">
+                </div>
+            </div>
+            <button class="btn blue" onclick="backToInfo()">⬅️ Back</button>
+            <button class="btn orange" onclick="diagnose()">🧠 Analyze Now</button>
+        </div>
+
+        <!-- Result Box Updated to show Education Section -->
+        <div id="resultBox" class="form-box" style="display: none; max-width: 700px;">
+            <div class="card" style="border-bottom: none;">
+                <h2>🧠 AI Diagnosis Result</h2>
+                <div id="output" style="margin-bottom: 20px;"></div>
+                
+                <!-- This is where the Education info will appear -->
+                <div id="educationSection" style="background: #f0f7ff; padding: 20px; border-radius: 15px; text-align: left; border-left: 5px solid #4a90e2;">
+                </div>
+
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+                <button class="btn blue" onclick="location.reload()">🔄 Start Over</button>
+                <a href="vets.html" class="btn orange">🏥 Find a Vet</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 1. FULL Symptoms List
+        const allSymptoms = [
+            "weight_loss", "increased_appetite", "unkempt", "vomiting", "diarrhea",
+            "thirst", "urination", "rapid_breathing", "heart_rate", "hyperactivity",
+            "aggression", "thyroid_lump", "thick_nails", "fast_breathing", "difficult_breathing",
+            "open_mouth", "nasal_discharge", "fever", "cough", "blue_mucus", "lethargy",
+            "loss_appetite", "hair_loss", "nose_bleed", "exercise_intolerance", "skin_scaling",
+            "nodules", "drooling", "bad_breath", "tartar", "pawing_face", "head_shaking",
+            "difficulty_swallowing", "dropping_food", "loose_teeth", "dehydration",
+            "mouth_sores", "foul_breath", "muscle_wasting", "weakness", "poor_coat",
+            "behavior_change", "ear_scratching", "ear_pain", "ear_odor", "abdominal_pain",
+            "collapse", "bruising", "enlarged_abdomen", "yellow_skin", "eye_redness",
+            "blindness", "seizures", "lymph_nodes", "gum_pale", "chronic_infection",
+            "blood_urine", "firm_bladder", "straining", "genital_licking", "itching",
+            "scabs", "fleas"
+        ];
+
+        const container = document.getElementById("symptomsContainer");
+        allSymptoms.forEach(sym => {
+            container.innerHTML += `
+                <div class="symptom-item">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="checkbox" value="${sym}"> 
+                        <span>${sym.replaceAll("_", " ")}</span>
+                    </label>
+                </div>`;
+        });
+
+        // 2. Navigation Functions
+        function goToSymptoms() {
+            const age = document.getElementById('petAge').value;
+            const weight = document.getElementById('petWeight').value;
+            if (!age || !weight) {
+                alert("Please fill in the basic info first! 🐾");
+                return;
+            }
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function backToInfo() {
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').style.display = 'none';
+        }
+
+        // 3. FULL Disease & Education Data
+        const diseases = {
+            "Hyperthyroidism": ["weight_loss", "increased_appetite", "vomiting", "diarrhea", "thirst", "urination", "hyperactivity"],
+            "Pneumonia": ["fast_breathing", "difficult_breathing", "open_mouth", "cough", "fever"],
+            "Parasitic Infection": ["weight_loss", "diarrhea", "vomiting", "hair_loss", "skin_scaling"],
+            "Dental Disease": ["drooling", "bad_breath", "tartar", "difficulty_swallowing"],
+            "CKD": ["thirst", "urination", "vomiting", "weight_loss", "dehydration"],
+            "Diabetes": ["thirst", "urination", "weight_loss", "increased_appetite"],
+            "Ear Mites": ["ear_scratching", "head_shaking", "ear_odor"],
+            "Panleukopenia": ["vomiting", "diarrhea", "lethargy", "fever"],
+            "FIP": ["weight_loss", "fever", "lethargy", "enlarged_abdomen"],
+            "FIV": ["fever", "lethargy", "loss_appetite"],
+            "FeLV": ["weight_loss", "loss_appetite", "gum_pale"],
+            "FLUTD": ["urination", "blood_urine"],
+            "Cystitis": ["straining", "urination", "blood_urine"],
+            "Flea Allergy": ["itching", "hair_loss", "fleas"]
+        };
+
+        const info = {
+            "Hyperthyroidism": "<b>Education:</b> Overactive thyroid in older cats.<br><b>Give:</b> High-protein wet food, fresh water<br><b>Avoid:</b> Fish treats, high iodine food<br><b>Prevention:</b> Regular senior checkups",
+            "Pneumonia": "<b>Education:</b> Lung infection, can be emergency.<br><b>Give:</b> Warm wet food, hydration<br><b>Avoid:</b> Force feeding, dusty food<br><b>Prevention:</b> Vaccination<br><b style='color:red'>Emergency:</b> Open-mouth breathing",
+            "Parasitic Infection": "<b>Education:</b> Worms or parasites affect body.<br><b>Give:</b> Balanced diet, clean water<br><b>Avoid:</b> Raw meat, dirty food<br><b>Prevention:</b> Deworming, hygiene",
+            "Dental Disease": "<b>Education:</b> Painful teeth/gums.<br><b>Give:</b> Soft food, water<br><b>Avoid:</b> Hard food, bones<br><b>Prevention:</b> Dental care",
+            "CKD": "<b>Education:</b> Kidney failure in older cats.<br><b>Give:</b> Renal diet, water<br><b>Avoid:</b> Salty food<br><b>Prevention:</b> Blood tests, hydration",
+            "Diabetes": "<b>Education:</b> Blood sugar disorder.<br><b>Give:</b> High protein low carb diet<br><b>Avoid:</b> Sugary food<br><b>Prevention:</b> Weight control",
+            "Ear Mites": "<b>Education:</b> Ear parasites causing itching.<br><b>Give:</b> Normal diet<br><b>Avoid:</b> Oils in ears<br><b>Prevention:</b> Ear cleaning",
+            "Panleukopenia": "<b>Education:</b> Serious viral disease.<br><b>Give:</b> Soft food, fluids<br><b>Avoid:</b> Delay treatment<br><b>Prevention:</b> Vaccination",
+            "FIP": "<b>Education:</b> Severe viral disease.<br><b>Give:</b> High calorie diet<br><b>Avoid:</b> Stress<br><b>Prevention:</b> Clean environment",
+            "FIV": "<b>Education:</b> Weak immune system.<br><b>Give:</b> High-quality food<br><b>Avoid:</b> Raw diet<br><b>Prevention:</b> Keep indoors",
+            "FeLV": "<b>Education:</b> Virus affecting blood.<br><b>Give:</b> Balanced nutrition<br><b>Avoid:</b> Stress<br><b>Prevention:</b> Vaccination",
+            "FLUTD": "<b>Education:</b> Urinary disease.<br><b>Give:</b> Wet food, water<br><b>Avoid:</b> Dry-only diet<br><b>Prevention:</b> Clean litter<br><b style='color:red'>Emergency:</b> No urine",
+            "Cystitis": "<b>Education:</b> Stress bladder issue.<br><b>Give:</b> Wet food, water<br><b>Avoid:</b> Stress<br><b>Prevention:</b> Calm environment",
+            "Flea Allergy": "<b>Education:</b> Allergy from flea bites.<br><b>Give:</b> Balanced diet<br><b>Avoid:</b> Missing flea control<br><b>Prevention:</b> Flea treatment"
+        };
+
+        // 4. Diagnosis Logic
+        function diagnose() {
+            let selected = document.querySelectorAll('#symptomsContainer input:checked');
+            if (selected.length < 3) {
+                alert("Please select at least 3 symptoms! 😺");
+                return;
+            }
+
+            let s = Array.from(selected).map(x => x.value);
+            let scores = {};
+            for (let d in diseases) {
+                scores[d] = diseases[d].filter(sym => s.includes(sym)).length;
+            }
+
+            let best = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
+
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('resultBox').style.display = 'block';
+
+            const output = document.getElementById("output");
+            const educationSection = document.getElementById("educationSection");
+
+            if (scores[best] === 0) {
+                output.innerHTML = "No clear match found. Please consult a vet for safety.";
+                educationSection.style.display = "none";
+            } else {
+                output.innerHTML = `Based on the symptoms, your cat might have:<br><b style="font-size:24px; color:#4a90e2;">${best}</b>`;
+                educationSection.style.display = "block";
+                educationSection.innerHTML = info[best] + "<br><br><b style='color:red'>RED ALERT:</b> Seek vet immediately if severe symptoms.";
+            }
+
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>PawCare Pro</h3>
+                <p>Providing AI-powered health insights for your feline friends.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a><br>
+                <a href="diagnosis.html">Health Check</a><br>
+                <a href="vets.html">Find a Vet</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Support</h3>
+                <p>📧 support@pawcarepro.com</p>
+                <p>📍 Lahore, Pakistan</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 PawCare Pro | Made with ❤️ for Cats
+        </div>
+    </footer>
+</body>
+</html>

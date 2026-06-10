@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Best Veterinary Clinics & Animal Hospitals Nearby | PawCare Pro</title>
+    <meta name="description" content="Locate top-rated veterinary clinics and animal hospitals near you with PawCare Pro's easy-to-use vet finder. Get expert pet care advice and book appointments online.">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <!-- Logo Image Added Here -->
+            <img src="logo.png" alt="PawCare Pro - Smart Cat AI Health Assistant Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+            PawCare Pro
+        </div>
+       
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="diagnosis.html">🐱 Diagnosis</a>
+            <a href="vets.html" class="active">🏥 Vet Finder</a>
+            <a href="reviews.html">✨ Reviews</a>
+            <a href="contact.html" class="active">📞 Contact</a>
+        </div>
+    </nav>
+
+    <section class="content-section" style="padding: 100px 20px; text-align: center;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2>🏥 Find a Vet Nearby</h2>
+            <p>Enter your city to find the best care for your cat.</p>
+
+            <input id="cityInput"
+                style="padding: 12px; width: 80%; max-width: 400px; border-radius: 10px; border: 1px solid #ccc; margin: 20px 0;"
+                placeholder="Type 'Lahore' or 'Karachi'..." onkeyup="findVet(this.value)">
+
+            <div id="vetList"
+                style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: left;">
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function findVet(city) {
+            const list = document.getElementById("vetList");
+            const query = city.toLowerCase().trim();
+
+            if (query.length < 2) { list.innerHTML = ""; return; }
+
+            const data = {
+                "lahore": [
+                    { name: "Aliyan Veterinary Hospital", phone: "03324373070", address: "Shanghai Rd Lahore" },
+                    { name: "Pet City Hospital", phone: "03454567196", address: "Model Town Lahore" },
+                    { name: "Aliyan Veterinary Hospital (24/7 Emergency)", hours: "24 Hours", address: "Shanghai Rd Lahore", rating: "4.3 ⭐", phone: "03324373070", services: "X-Ray, Surgery, Grooming" },
+                    { name: "Pet City Hospital", hours: "Till 10 PM", address: "Model Town Lahore", rating: "5 ⭐", phone: "03454567196", services: "Dental, Lab Tests" },
+                    { name: "Dr. Umer's Veterinary Clinic", hours: "Normal Hours", address: "41 Bank Square, C-Block Model Town, Lahore", rating: "4.5 ⭐", phone: "03224933201", services: "General Checkup, Treatment" },
+                    { name: "Modern Pets Hospital", hours: "Till 11 PM", address: "59-60 C Block, Model Town, Lahore", rating: "4.4 ⭐", phone: "03334230574", services: "Vaccination, Grooming, Boarding, Medical Care" },
+                    { name: "Petxpress Veterinary Hospital", hours: "24 Hours", address: "78 Y Block DHA, Lahore", rating: "4.5 ⭐", phone: "03058883494", services: "Emergency, Surgery, Grooming, Consultation" },
+                    { name: "Pets and Vets Clinic", hours: "11 am–10:30 pm (Sun: 2–9:30 pm)", address: "Street 141, Sector H DHA Phase 1, Lahore", rating: "4.4 ⭐", phone: "03334242458", services: "Friendly staff, Dr. Ali trusted" },
+                    { name: "National Veterinary Clinic", hours: "9 am–12 am", address: "E-174 Airport Rd, Gulshan e Ali Colony, Lahore", rating: "4.5 ⭐", phone: "Not Available", services: "Strong surgical team" },
+                    { name: "Pets Choice Veterinary Clinic", hours: "11 am–11 pm", address: "81/1 Commercial, Khuda Buksh Colony Cantt", rating: "5 ⭐", phone: "03073111304", services: "Fast response, smooth service" },
+                    { name: "Zia Vet Clinic DHA", hours: "11 am–11 pm", address: "139-G DHA Lahore", rating: "4.6 ⭐", phone: "03218477847", services: "Caring doctors, welcoming staff" },
+                    { name: "Bellevue Animal Hospital", hours: "10 am–10 pm", address: "DHA Phase 8 Lahore", rating: "4.8 ⭐", phone: "03075939668", services: "Grooming, bird services" },
+                    { name: "Vets Care Hospital", hours: "1–10 pm", address: "Gulberg III Lahore", rating: "4.9 ⭐", phone: "03027751373", services: "Complex cases, online consult" },
+                    { name: "Pet Collectives Vet Hospital", hours: "Not Available", address: "Sector G DHA Phase 1 Lahore", rating: "4.6 ⭐", phone: "03272323388", services: "Hygienic, professional staff" },
+                    { name: "Defence Animal Hospital & Rescue", hours: "24 Hours", address: "Sector G DHA Phase 1 Lahore", rating: "4.6 ⭐", phone: "03214551700", services: "Emergency, rescue care" },
+                    { name: "Muneeb Veterinary Complex", hours: "24 Hours", address: "DHA Phase 6C Lahore", rating: "4.9 ⭐", phone: "03174016217", services: "Quick diagnosis, clean environment" }
+                ],
+                "karachi": [
+                    { name: "Karachi Animal Hospital", phone: "03001234567", address: "Clifton Karachi" },
+                    { name: "Ayesha Pet Clinic", phone: "03111234567", address: "Gulshan-e-Iqbal Karachi" }
+                ]
+            };
+
+            list.innerHTML = ""; // Clear old results
+
+            if (data[query]) {
+                data[query].forEach(v => {
+                    list.innerHTML += `
+                        <div style="background: white; padding: 20px; border-radius: 15px; shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #eee;">
+                            <h4 style="margin: 0 0 10px 0; color: #4a90e2;">🐾 ${v.name}</h4>
+                            <p style="margin: 5px 0; font-size: 14px;">📍 ${v.address}</p>
+                            <p style="margin: 5px 0; font-weight: bold; color: #ff8c00;">📞 ${v.phone}</p>
+                        </div>`;
+                });
+            } else {
+                list.innerHTML = `<p style="grid-column: 1/-1; color: #777;">Type 'Lahore' or 'Karachi' to see results... 🐾</p>`;
+            }
+        }
+    </script>
+</body>
+
+</html>

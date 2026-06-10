@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PawCare Pro | Reviews</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <!-- Logo Image Added Here -->
+            <img src="logo.png" alt="PawCare Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+            PawCare Pro
+        </div>
+        
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="diagnosis.html">🐱 Diagnosis</a>
+            <a href="vets.html">🏥 Vet Finder</a>
+            <a href="reviews.html" class="active">✨ Reviews</a>
+            <a href="contact.html">📞 Contact</a>
+        </div>
+    </nav>
+
+    <section class="content-section">
+        <div class="form-box">
+            <h2>✨ Community Vibe Check 🔥</h2>
+            <div id="ratingStars" class="stars">
+                <span onclick="setRating(1)">⭐</span><span onclick="setRating(2)">⭐</span><span onclick="setRating(3)">⭐</span><span onclick="setRating(4)">⭐</span><span onclick="setRating(5)">⭐</span>
+            </div>
+            <input id="revName" placeholder="Your Name">
+            <textarea id="revText" placeholder="Spill the tea about your experience..."></textarea>
+            <button class="btn orange" onclick="postReview()">Post Review 🚀</button>
+        </div>
+
+        <div id="reviewList" class="review-grid">
+            </div>
+    </section>
+
+    <script>
+        let currentRating = 0;
+        function setRating(r) {
+            currentRating = r;
+            document.querySelectorAll('.stars span').forEach((s, i) => {
+                s.style.color = i < r ? '#ff8c00' : '#ddd';
+            });
+        }
+
+        function postReview() {
+            const name = document.getElementById('revName').value;
+            const text = document.getElementById('revText').value;
+            if(!name || !text || currentRating === 0) { alert("Please fill all fields!"); return; }
+            
+            const list = document.getElementById('reviewList');
+            const card = `<div class="card"><h4>${name} ${"⭐".repeat(currentRating)}</h4><p>"${text}"</p></div>`;
+            list.innerHTML = card + list.innerHTML;
+            
+            // Clear inputs
+            document.getElementById('revName').value = "";
+            document.getElementById('revText').value = "";
+            setRating(0);
+        }
+    </script>
+</body>
+</html>

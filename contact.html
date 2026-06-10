@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PawCare Pro | Contact Us</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <!-- Logo Image Added Here -->
+            <img src="logo.png" alt="PawCare Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+            PawCare Pro
+        </div>
+        
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="diagnosis.html">🐱 Diagnosis</a>
+            <a href="vets.html">🏥 Vet Finder</a>
+            <a href="reviews.html">✨ Reviews</a>
+            <a href="contact.html" class="active">📞 Contact</a>
+        </div>
+    </nav>
+
+    <section class="content-section">
+        <div class="form-box">
+            <h2>📞 Contact Us</h2>
+            <p>Have questions? We're here to help!</p>
+            <form onsubmit="event.preventDefault(); alert('Message Sent! 🐾');">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <textarea placeholder="Your Message..." required></textarea>
+                <button type="submit" class="btn blue">Send Message ✉️</button>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
